@@ -1,14 +1,16 @@
 import QtQuick
-import QtQuick.Effects
 import qs.modules.common
 
-RectangularShadow {
+// TexFi: офсетная тень без blur — сдвинутый плоский прямоугольник, а не
+// Material-elevation. Раньше здесь был RectangularShadow с растушёванным
+// краем; теперь это просто твёрдый блок под карточкой, как у PixelCard.
+Rectangle {
+    id: root
     required property var target
-    anchors.fill: target
+    x: target.x + 4
+    y: target.y + 4
+    width: target.width
+    height: target.height
     radius: target.radius
-    blur: 0.9 * Appearance.sizes.elevationMargin
-    offset: Qt.vector2d(0.0, 1.0)
-    spread: 1
-    color: Appearance.colors.colShadow
-    cached: true
+    color: "#8C000000"
 }

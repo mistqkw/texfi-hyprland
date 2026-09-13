@@ -85,7 +85,6 @@ Item {
     StyledRectangularShadow {
         target: fabButton
         radius: fabButton.buttonRadius
-        blur: 0.6 * Appearance.sizes.elevationMargin
     }
     FloatingActionButton {
         id: fabButton

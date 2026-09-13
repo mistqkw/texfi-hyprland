@@ -23,6 +23,9 @@ MouseArea { // Notification group area
 
     property real dragConfirmThreshold: 70 // Drag further to discard notification
     property real dismissOvershoot: 20 // Account for gaps and bouncy animations
+    // TexFi: pixel-dissolve вместо гладкого fade, тот же принцип, что в
+    // NotificationItem.qml — 1 = карточка целая, 0 = закрыта блоками.
+    property real dissolveProgress: 0
     property var qmlParent: root?.parent?.parent // There's something between this and the parent ListView
     property var parentDragIndex: qmlParent?.dragIndex
     property var parentDragDistance: qmlParent?.dragDistance
@@ -37,6 +40,17 @@ MouseArea { // Notification group area
         background.anchors.leftMargin = background.anchors.leftMargin; // Break binding
         destroyAnimation.left = left;
         destroyAnimation.running = true;
+    }
+
+    Component.onCompleted: dissolveAppear.start()
+    NumberAnimation {
+        id: dissolveAppear
+        target: root
+        property: "dissolveProgress"
+        from: 0
+        to: 1
+        duration: 260 // AppMotion.route
+        easing.type: Easing.OutQuad
     }
 
     hoverEnabled: true
@@ -56,12 +70,11 @@ MouseArea { // Notification group area
         running: false
 
         NumberAnimation {
-            target: background.anchors
-            property: "leftMargin"
-            to: (root.width + root.dismissOvershoot) * (destroyAnimation.left ? -1 : 1)
-            duration: Appearance.animation.elementMove.duration
-            easing.type: Appearance.animation.elementMove.type
-            easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+            target: root
+            property: "dissolveProgress"
+            to: 0
+            duration: 260 // AppMotion.route
+            easing.type: Easing.InQuad
         }
         onFinished: () => {
             root.notifications.forEach((notif) => {
@@ -124,6 +137,9 @@ MouseArea { // Notification group area
         color: popup ? Appearance.colors.colBackgroundSurfaceContainer : Appearance.colors.colLayer2
         radius: Appearance.rounding.normal
         anchors.leftMargin: root.xOffset
+
+        opacity: 0.35 + 0.65 * root.dissolveProgress
+        transform: Translate { y: (1 - root.dissolveProgress) * 8 }
 
         Behavior on anchors.leftMargin {
             enabled: !dragManager.dragging
@@ -254,6 +270,12 @@ MouseArea { // Notification group area
                 }
 
             }
+        }
+
+        PixelDissolveOverlay {
+            anchors.fill: parent
+            progress: root.dissolveProgress
+            blockColor: Appearance.colors.colLayer0
         }
     }
 }

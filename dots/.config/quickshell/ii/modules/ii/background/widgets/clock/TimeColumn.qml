@@ -28,8 +28,13 @@ Column {
             anchors.horizontalCenter: root.horizontalCenter
             color: root.color
             font {
-                family: Appearance.font.family.expressive
-                weight: Font.Bold
+                // TexFi: самое крупное акцентное число во всей оболочке —
+                // цифры фиксированы пиксельным шрифтом напрямую, а не через
+                // общую роль "expressive" (та же роль стоит на мелких значках
+                // номеров рабочих столов, и переключать её всю сразу — заносить
+                // пиксельный шрифт туда, где его быть не должно).
+                family: "Press Start 2P"
+                weight: Font.Normal
                 pixelSize: numberSize
             }
 

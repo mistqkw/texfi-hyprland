@@ -48,27 +48,29 @@ Item {
         spacing: 4
         anchors.fill: parent
 
-        ClippedFilledCircularProgress {
+        // TexFi: то же пиксельное кольцо, что и у индикаторов ресурсов.
+        Item {
             id: mediaCircProg
             Layout.alignment: Qt.AlignVCenter
-            lineWidth: Appearance.rounding.unsharpen
-            value: activePlayer?.position / activePlayer?.length
-            implicitSize: 20
-            colPrimary: Appearance.colors.colOnSecondaryContainer
-            enableAnimation: false
+            property int implicitSize: 20
+            implicitWidth: implicitSize
+            implicitHeight: implicitSize
 
-            Item {
+            PixelTimerRing {
+                anchors.fill: parent
+                segmentsCount: 12
+                ringWidthRatio: 0.36
+                progress: activePlayer?.position / activePlayer?.length || 0
+                accentColor: "#4a7dfb"
+                trackColor: Appearance.colors.colLayer2
+            }
+
+            MaterialSymbol {
                 anchors.centerIn: parent
-                width: mediaCircProg.implicitSize
-                height: mediaCircProg.implicitSize
-                
-                MaterialSymbol {
-                    anchors.centerIn: parent
-                    fill: 1
-                    text: activePlayer?.isPlaying ? "pause" : "music_note"
-                    iconSize: Appearance.font.pixelSize.normal
-                    color: Appearance.m3colors.m3onSecondaryContainer
-                }
+                fill: 1
+                text: activePlayer?.isPlaying ? "pause" : "music_note"
+                iconSize: Appearance.font.pixelSize.normal
+                color: Appearance.m3colors.m3onSecondaryContainer
             }
         }
 

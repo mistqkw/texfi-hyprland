@@ -110,7 +110,11 @@ Item { // Wrapper
         clip: true
         implicitWidth: columnLayout.implicitWidth
         implicitHeight: columnLayout.implicitHeight
-        radius: searchBar.height / 2 + searchBar.verticalPadding
+        // TexFi: раньше это была Material-капсула (radius = высота/2);
+        // PixelCard прямоугольный, с плоским бордером вместо мягкого elevation.
+        radius: 0
+        border.width: 2
+        border.color: Appearance.colors.colLayer0Border
         color: Appearance.colors.colBackgroundSurfaceContainer
 
         Behavior on implicitHeight {
@@ -133,7 +137,7 @@ Item { // Wrapper
                 maskSource: Rectangle {
                     width: searchWidgetContent.width
                     height: searchWidgetContent.width
-                    radius: searchWidgetContent.radius
+                    radius: 0
                 }
             }
 

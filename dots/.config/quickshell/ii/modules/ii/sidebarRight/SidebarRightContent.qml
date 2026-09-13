@@ -56,7 +56,8 @@ Item {
         color: Appearance.colors.colLayer0
         border.width: 1
         border.color: Appearance.colors.colLayer0Border
-        radius: Appearance.rounding.screenRounding - Appearance.sizes.hyprlandGapsOut + 1
+        // TexFi: тот же прямоугольный язык, что у плавающей панели и поповеров.
+        radius: 0
 
         ColumnLayout {
             anchors.fill: parent
@@ -268,7 +269,7 @@ Item {
                 toggled: false
                 buttonIcon: "restart_alt"
                 onClicked: {
-                    Quickshell.execDetached(["hyprctl", "reload"])
+                    Hyprland.dispatch("reload");
                     Quickshell.reload(true);
                 }
                 StyledToolTip {

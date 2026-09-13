@@ -9,7 +9,8 @@ GroupButton {
     baseHeight: 40
     clickedWidth: baseWidth + 20
     toggled: false
-    buttonRadius: (altAction && toggled) ? Appearance?.rounding.normal : Math.min(baseHeight, baseWidth) / 2
+    // TexFi: PixelButton, не круг.
+    buttonRadius: Appearance?.rounding?.small ?? 6
     buttonRadiusPressed: Appearance?.rounding?.small
 
     contentItem: MaterialSymbol {

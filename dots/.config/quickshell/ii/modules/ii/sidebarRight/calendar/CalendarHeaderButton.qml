@@ -17,7 +17,8 @@ RippleButton {
     }
 
     background.anchors.fill: button
-    buttonRadius: Appearance.rounding.full
+    // TexFi: PixelButton, не круг — даже когда forceCircle держит форму 1:1.
+    buttonRadius: Appearance.rounding.small
     colBackground: Appearance.colors.colLayer2
     colBackgroundHover: Appearance.colors.colLayer2Hover
     colRipple: Appearance.colors.colLayer2Active

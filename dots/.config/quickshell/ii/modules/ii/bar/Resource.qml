@@ -23,29 +23,31 @@ Item {
             verticalCenter: parent.verticalCenter
         }
 
-        ClippedFilledCircularProgress {
+        // TexFi: пиксельное сегментированное кольцо (как таймер в сайдбаре)
+        // вместо гладкой Material-дуги со скруглёнными концами.
+        Item {
             id: resourceCircProg
             Layout.alignment: Qt.AlignVCenter
-            lineWidth: Appearance.rounding.unsharpen
-            value: percentage
-            implicitSize: 20
-            colPrimary: root.warning ? Appearance.colors.colError : Appearance.colors.colOnSecondaryContainer
-            accountForLightBleeding: !root.warning
-            enableAnimation: false
+            property int implicitSize: 20
+            implicitWidth: implicitSize
+            implicitHeight: implicitSize
 
-            Item {
+            PixelTimerRing {
+                anchors.fill: parent
+                segmentsCount: 12
+                ringWidthRatio: 0.36
+                progress: percentage
+                accentColor: root.warning ? Appearance.colors.colError : "#4a7dfb"
+                trackColor: Appearance.colors.colLayer2
+            }
+
+            MaterialSymbol {
                 anchors.centerIn: parent
-                width: resourceCircProg.implicitSize
-                height: resourceCircProg.implicitSize
-                
-                MaterialSymbol {
-                    anchors.centerIn: parent
-                    font.weight: Font.DemiBold
-                    fill: 1
-                    text: iconName
-                    iconSize: Appearance.font.pixelSize.normal
-                    color: Appearance.m3colors.m3onSecondaryContainer
-                }
+                font.weight: Font.DemiBold
+                fill: 1
+                text: iconName
+                iconSize: Appearance.font.pixelSize.normal
+                color: Appearance.m3colors.m3onSecondaryContainer
             }
         }
 

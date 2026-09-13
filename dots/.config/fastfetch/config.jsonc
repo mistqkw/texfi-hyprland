@@ -1,0 +1,40 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    // TexFi: логотип - обычный текстовый ASCII-арт (буквы/цифры с ANSI-цветом
+    // прямо в файле), как и был раньше у дистрибутива, просто перекрашенный
+    // под фирменный синий; не растровая картинка, не слово-лого "TEXFI".
+    "logo": {
+        "source": "~/.config/fastfetch/texfi_logo.txt"
+    },
+    "modules": [
+        "title",
+        "separator",
+        "os",
+        "host",
+        "kernel",
+        "uptime",
+        "packages",
+        "shell",
+        "display",
+        "de",
+        "wm",
+        "wmtheme",
+        "theme",
+        "icons",
+        "font",
+        "cursor",
+        "terminal",
+        "terminalfont",
+        "cpu",
+        "gpu",
+        "memory",
+        "swap",
+        "disk",
+        "localip",
+        "battery",
+        "poweradapter",
+        "locale",
+        "break",
+        "colors"
+    ]
+}

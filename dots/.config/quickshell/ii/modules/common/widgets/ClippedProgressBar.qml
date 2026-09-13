@@ -41,7 +41,7 @@ ProgressBar {
     contentItem: Rectangle {
         id: contentItem
         anchors.fill: parent
-        radius: 9999
+        radius: 0 // TexFi: раньше пилюля (9999), теперь прямоугольная батарея
         color: root.trackColor
         visible: false
 

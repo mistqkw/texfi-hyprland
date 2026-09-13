@@ -20,9 +20,12 @@ ColumnLayout {
             iconSize: Appearance.font.pixelSize.hugeass
         }
         StyledText {
+            // TexFi: заголовок секции — крупный, редкий текст, поэтому
+            // пиксельный шрифт уместен (в отличие от ContentSubsectionLabel
+            // и самих настроек, которые читают часто и мелким шрифтом).
             text: root.title
-            font.pixelSize: Appearance.font.pixelSize.larger
-            font.weight: Font.Medium
+            font.family: Appearance.font.family.title
+            font.pixelSize: Appearance.font.pixelSize.small
             color: Appearance.colors.colOnSecondaryContainer
         }
     }

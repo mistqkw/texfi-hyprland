@@ -42,7 +42,9 @@ Item { // Bar content region
             margins: Config.options.bar.cornerStyle === 1 ? (Appearance.sizes.hyprlandGapsOut) : 0 // idk why but +1 is needed
         }
         color: Config.options.bar.showBackground ? Appearance.colors.colLayer0 : "transparent"
-        radius: Config.options.bar.cornerStyle === 1 ? Appearance.rounding.windowRounding : 0
+        // TexFi: панель плавает (margins выше), но остаётся прямоугольной —
+        // никаких Material-скруглений на floating-панели, как у PixelCard.
+        radius: 0
         border.width: Config.options.bar.cornerStyle === 1 ? 1 : 0
         border.color: Appearance.colors.colLayer0Border
     }
@@ -85,13 +87,17 @@ Item { // Bar content region
             LeftSidebarButton { // Left sidebar button
                 id: leftSidebarButton
                 Layout.alignment: Qt.AlignVCenter
-                Layout.leftMargin: Appearance.rounding.screenRounding
+                // TexFi: раньше сюда одалживали Appearance.rounding.screenRounding
+                // как отступ от скруглённого угла экрана. Угол теперь острый,
+                // rounding = 0, но контент бара всё равно не должен упираться
+                // в самый край — отступ стал самостоятельной величиной.
+                Layout.leftMargin: Appearance.sizes.barEdgeInset
                 colBackground: barLeftSideMouseArea.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1)
             }
 
             ActiveWindow {
-                Layout.leftMargin: 10 + (leftSidebarButton.visible ? 0 : Appearance.rounding.screenRounding)
-                Layout.rightMargin: Appearance.rounding.screenRounding
+                Layout.leftMargin: 10 + (leftSidebarButton.visible ? 0 : Appearance.sizes.barEdgeInset)
+                Layout.rightMargin: Appearance.sizes.barEdgeInset
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 visible: root.useShortenedForm === 0
@@ -228,7 +234,7 @@ Item { // Bar content region
                 id: rightSidebarButton
 
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                Layout.rightMargin: Appearance.rounding.screenRounding
+                Layout.rightMargin: Appearance.sizes.barEdgeInset
                 Layout.fillWidth: false
 
                 implicitWidth: indicatorsRowLayout.implicitWidth + 10 * 2

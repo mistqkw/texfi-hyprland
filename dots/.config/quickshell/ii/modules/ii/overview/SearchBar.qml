@@ -36,16 +36,10 @@ RowLayout {
         id: searchIcon
         Layout.alignment: Qt.AlignVCenter
         iconSize: Appearance.font.pixelSize.huge
-        shape: switch(root.searchPrefixType) {
-            case SearchBar.SearchPrefixType.Action: return MaterialShape.Shape.Pill;
-            case SearchBar.SearchPrefixType.App: return MaterialShape.Shape.Clover4Leaf;
-            case SearchBar.SearchPrefixType.Clipboard: return MaterialShape.Shape.Gem;
-            case SearchBar.SearchPrefixType.Emojis: return MaterialShape.Shape.Sunny;
-            case SearchBar.SearchPrefixType.Math: return MaterialShape.Shape.PuffyDiamond;
-            case SearchBar.SearchPrefixType.ShellCommand: return MaterialShape.Shape.PixelCircle;
-            case SearchBar.SearchPrefixType.WebSearch: return MaterialShape.Shape.SoftBurst;
-            default: return MaterialShape.Shape.Cookie7Sided;
-        }
+        // TexFi: один силуэт на весь контекст (поиск) — органические Material
+        // "блобы" (Clover/Gem/Sunny/Cookie/Burst) заменены на пиксельный
+        // кружок; режим отличают иконка и цвет, а не форма бейджа.
+        shape: MaterialShape.Shape.PixelCircle
         text: switch (root.searchPrefixType) {
             case SearchBar.SearchPrefixType.Action: return "settings_suggest";
             case SearchBar.SearchPrefixType.App: return "apps";
@@ -137,13 +131,10 @@ RowLayout {
                 from: 0
                 to: 360
             }
-            shape: {
-                if (songRecButton.down) {
-                    return songRecButton.toggled ? MaterialShape.Shape.Circle : MaterialShape.Shape.Square
-                } else {
-                    return songRecButton.toggled ? MaterialShape.Shape.SoftBurst : MaterialShape.Shape.Circle
-                }
-            }
+            // TexFi: тот же пиксельный кружок при любом состоянии — нажатие
+            // и toggled уже читаются по цвету и вращению, форме незачем
+            // "перетекать" между Material-блобами.
+            shape: MaterialShape.Shape.PixelCircle
             color: {
                 if (songRecButton.toggled) {
                     return songRecButton.hovered ? Appearance.colors.colPrimaryHover : Appearance.colors.colPrimary

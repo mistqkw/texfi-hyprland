@@ -31,11 +31,27 @@ Item { // Notification item area
 
     implicitHeight: background.implicitHeight
 
+    // TexFi: pixel-dissolve вместо гладкого fade — 1 = карточка целая,
+    // 0 = полностью закрыта блоками. Те же длительность и кривые, что и
+    // у перехода между экранами в приложениях (AppMotion.route, enter/exit).
+    property real dissolveProgress: 0
+
     function destroyWithAnimation(left = false) {
         root.qmlParent.resetDrag()
         background.anchors.leftMargin = background.anchors.leftMargin; // Break binding
         destroyAnimation.left = left;
         destroyAnimation.running = true;
+    }
+
+    Component.onCompleted: dissolveAppear.start()
+    NumberAnimation {
+        id: dissolveAppear
+        target: root
+        property: "dissolveProgress"
+        from: 0
+        to: 1
+        duration: 260 // AppMotion.route
+        easing.type: Easing.OutQuad // ~Curves.easeOut
     }
 
     TextMetrics {
@@ -50,12 +66,11 @@ Item { // Notification item area
         running: false
 
         NumberAnimation {
-            target: background.anchors
-            property: "leftMargin"
-            to: (root.width + root.dismissOvershoot) * (destroyAnimation.left ? -1 : 1)
-            duration: Appearance.animation.elementMove.duration
-            easing.type: Appearance.animation.elementMove.type
-            easing.bezierCurve: Appearance.animation.elementMove.bezierCurve
+            target: root
+            property: "dissolveProgress"
+            to: 0
+            duration: 260 // AppMotion.route
+            easing.type: Easing.InQuad // ~Curves.easeIn
         }
         onFinished: () => {
             Notifications.discardNotification(notificationObject.notificationId);
@@ -116,6 +131,12 @@ Item { // Notification item area
         radius: Appearance.rounding.small
         anchors.leftMargin: root.xOffset
 
+        // TexFi: та же просадка+прозрачность, что у PixelDissolveTransition
+        // в приложениях — маленький сдвиг читается даже там, где сам
+        // dissolve почти незаметен.
+        opacity: 0.35 + 0.65 * root.dissolveProgress
+        transform: Translate { y: (1 - root.dissolveProgress) * 8 }
+
         Behavior on anchors.leftMargin {
             enabled: !dragManager.dragging
             NumberAnimation {
@@ -153,7 +174,7 @@ Item { // Notification item area
                 implicitHeight: summaryText.implicitHeight
                 StyledText {
                     id: summaryText
-                    Layout.fillWidth: summaryTextMetrics.width >= root.width * root.summaryElideRatio
+                    Layout.fillWidth: summaryTextMetrics.width >= summaryRow.implicitWidth * root.summaryElideRatio
                     visible: !root.onlyNotification
                     font.pixelSize: root.fontSize
                     color: Appearance.colors.colOnLayer3
@@ -318,6 +339,12 @@ Item { // Notification item area
                     }
                 }
             }
+        }
+
+        PixelDissolveOverlay {
+            anchors.fill: parent
+            progress: root.dissolveProgress
+            blockColor: Appearance.colors.colLayer0
         }
     }
 }
