@@ -1,20 +1,20 @@
 # TexFi Hyprland
 
-Форк [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland) (illogical-impulse) в стиле TexFi.
+A fork of [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland) (illogical-impulse) in the TexFi pixel-art style.
 
 ![screenshot](../screenshot.png)
 
-## Установка
+## Install
 
-Сначала поставь базовый illogical-impulse (если ещё не стоит):
+First install the base illogical-impulse setup (if you don't have it yet):
 <https://end-4.github.io/dots-hyprland/>
 
-Дальше — одна команда, накладывает TexFi поверх:
+Then, one command to lay TexFi on top:
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/mistqkw/texfi-hyprland/texfi-skin/install-texfi.sh)
 ```
 
-## Лицензия
+## License
 
-GPL-3.0, как у оригинала — см. [LICENSE](../LICENSE).
+GPL-3.0, same as upstream — see [LICENSE](../LICENSE).
