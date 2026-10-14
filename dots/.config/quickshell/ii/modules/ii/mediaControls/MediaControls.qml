@@ -155,15 +155,13 @@ Scope {
                     implicitWidth: placeholderBackground.implicitWidth + Appearance.sizes.elevationMargin
                     implicitHeight: placeholderBackground.implicitHeight + Appearance.sizes.elevationMargin
 
-                    StyledRectangularShadow {
-                        target: placeholderBackground
-                    }
-
                     Rectangle {
                         id: placeholderBackground
                         anchors.centerIn: parent
-                        color: Appearance.colors.colLayer0
-                        radius: root.popupRounding
+                        color: Appearance.colors.colLayer1Base
+                        radius: Appearance.rounding.normal
+                        border.width: 1
+                        border.color: Appearance.colors.colHairline
                         property real padding: 20
                         implicitWidth: placeholderLayout.implicitWidth + padding * 2
                         implicitHeight: placeholderLayout.implicitHeight + padding * 2
@@ -175,9 +173,10 @@ Scope {
                             StyledText {
                                 text: Translation.tr("No active player")
                                 font.pixelSize: Appearance.font.pixelSize.large
+                                color: Appearance.colors.colTextPrimary
                             }
                             StyledText {
-                                color: Appearance.colors.colSubtext
+                                color: Appearance.colors.colTextSecondary
                                 text: Translation.tr("Make sure your player has MPRIS support\nor try turning off duplicate player filtering")
                                 font.pixelSize: Appearance.font.pixelSize.small
                             }

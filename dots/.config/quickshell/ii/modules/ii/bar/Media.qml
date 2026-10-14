@@ -48,7 +48,7 @@ Item {
         spacing: 4
         anchors.fill: parent
 
-        // TexFi: то же пиксельное кольцо, что и у индикаторов ресурсов.
+        // hairline: тонкое кольцо прогресса с иконкой
         Item {
             id: mediaCircProg
             Layout.alignment: Qt.AlignVCenter
@@ -61,16 +61,15 @@ Item {
                 segmentsCount: 12
                 ringWidthRatio: 0.36
                 progress: activePlayer?.position / activePlayer?.length || 0
-                accentColor: "#4a7dfb"
-                trackColor: Appearance.colors.colLayer2
+                accentColor: Appearance.colors.colPrimary
+                trackColor: Appearance.colors.colHairline
             }
 
             MaterialSymbol {
                 anchors.centerIn: parent
-                fill: 1
                 text: activePlayer?.isPlaying ? "pause" : "music_note"
                 iconSize: Appearance.font.pixelSize.normal
-                color: Appearance.m3colors.m3onSecondaryContainer
+                color: Appearance.colors.colTextPrimary
             }
         }
 
@@ -82,7 +81,7 @@ Item {
             Layout.rightMargin: rowLayout.spacing
             horizontalAlignment: Text.AlignHCenter
             elide: Text.ElideRight // Truncates the text on the right
-            color: Appearance.colors.colOnLayer1
+            color: activePlayer ? Appearance.colors.colTextPrimary : Appearance.colors.colTextTertiary
             text: `${cleanedTitle}${activePlayer?.trackArtist ? ' • ' + activePlayer.trackArtist : ''}`
         }
 

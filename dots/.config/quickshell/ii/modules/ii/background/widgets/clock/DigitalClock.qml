@@ -85,6 +85,48 @@ ColumnLayout {
         }
     }
 
+    // температура в комнате с датчика CGG1: моно-подпись, значение акцентом
+    Row {
+        visible: RoomTemp.valid
+        Layout.alignment: timeRow.Layout.alignment
+        Layout.topMargin: 6
+        spacing: 10
+        Text {
+            text: "КОМНАТА"
+            color: Appearance.colors.colTextSecondary ?? "#a3a3ad"
+            renderType: Text.NativeRendering
+            font {
+                family: Appearance.font.family.monospace
+                pixelSize: Math.max(11, clockColumn.timeSize * 0.12)
+                letterSpacing: 2.2
+            }
+            anchors.baseline: tempText.baseline
+        }
+        Text {
+            id: tempText
+            text: RoomTemp.text
+            color: Appearance.colors.colPrimary
+            renderType: Text.NativeRendering
+            font {
+                family: "Unbounded"
+                weight: Font.DemiBold
+                pixelSize: Math.max(16, clockColumn.timeSize * 0.2)
+                features: { "tnum": 1 }
+            }
+        }
+        Text {
+            text: RoomTemp.humidityText
+            color: Appearance.colors.colTextSecondary ?? "#a3a3ad"
+            renderType: Text.NativeRendering
+            font {
+                family: Appearance.font.family.monospace
+                pixelSize: Math.max(11, clockColumn.timeSize * 0.12)
+                letterSpacing: 2.2
+            }
+            anchors.baseline: tempText.baseline
+        }
+    }
+
     // Quote
     ClockText {
         visible: Config.options.background.widgets.clock.quote.enable && Config.options.background.widgets.clock.quote.text.length > 0
