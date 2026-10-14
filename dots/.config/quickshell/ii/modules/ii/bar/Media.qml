@@ -33,12 +33,10 @@ Item {
         anchors.topMargin: 4
         anchors.bottomMargin: 4
         radius: Appearance.rounding.small
-        color: mouseArea.containsMouse ? Appearance.colors.colLayer1Hover : "transparent"
-        border.width: 1
-        border.color: mouseArea.containsMouse ? Appearance.colors.colTextSecondary : Appearance.colors.colHairline
+        color: mouseArea.pressed ? Appearance.colors.colLayer1Active
+            : mouseArea.containsMouse ? Appearance.colors.colLayer1Hover : "transparent"
         transform: Translate { y: mouseArea.pressed ? 1 : 0 }
         Behavior on color { ColorAnimation { duration: 160 * Appearance.motionScale } }
-        Behavior on border.color { ColorAnimation { duration: 160 * Appearance.motionScale } }
     }
 
     MouseArea {
@@ -54,9 +52,12 @@ Item {
                 activePlayer.previous();
             } else if (event.button === Qt.ForwardButton || event.button === Qt.RightButton) {
                 activePlayer.next();
-            } else if (event.button === Qt.LeftButton) {
-                GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen
             }
+        }
+        // левая кнопка — по отпусканию: иначе фокус-граб закрывает карточку тем же кликом
+        onClicked: (event) => {
+            if (event.button === Qt.LeftButton)
+                GlobalStates.mediaControlsOpen = !GlobalStates.mediaControlsOpen
         }
     }
 

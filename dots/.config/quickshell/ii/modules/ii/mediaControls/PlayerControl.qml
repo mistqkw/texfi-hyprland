@@ -313,24 +313,16 @@ Item { // Player instance
                         rippleEnabled: false
                         buttonRadius: Appearance.rounding.small
                         downAction: () => root.player.togglePlaying();
-                        colBackground: Appearance.colors.colTextPrimary
-                        colBackgroundHover: "transparent"
+                        colBackground: Appearance.colors.colPrimary
+                        colBackgroundHover: ColorUtils.mix(Appearance.colors.colPrimary, "#ffffff", 0.85)
                         transform: Translate { y: playPauseButton.down ? 1 : 0 }
 
-                        Rectangle {
-                            anchors.fill: parent
-                            z: 1
-                            radius: playPauseButton.buttonRadius
-                            color: "transparent"
-                            border.width: 1
-                            border.color: Appearance.colors.colTextPrimary
-                        }
                         contentItem: MaterialSymbol {
                             iconSize: 24
                             fill: 1
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            color: playPauseButton.hovered ? Appearance.colors.colTextPrimary : Appearance.colors.colLayer0Base
+                            color: "#ffffff"
                             text: root.player?.isPlaying ? "pause" : "play_arrow"
                         }
                     }
