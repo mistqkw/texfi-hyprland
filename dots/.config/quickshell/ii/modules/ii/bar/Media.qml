@@ -16,7 +16,7 @@ Item {
     readonly property string cleanedTitle: StringUtils.cleanMusicTitle(activePlayer?.trackTitle) || Translation.tr("No media")
 
     Layout.fillHeight: true
-    implicitWidth: rowLayout.implicitWidth + rowLayout.spacing * 2
+    implicitWidth: rowLayout.implicitWidth + 20
     implicitHeight: Appearance.sizes.barHeight
 
     Timer {
@@ -26,8 +26,26 @@ Item {
         onTriggered: activePlayer.positionChanged()
     }
 
-    MouseArea {
+    // hairline-кнопка: рамка, при наведении светлеет, нажатие — сдвиг на 1px
+    Rectangle {
+        id: pill
         anchors.fill: parent
+        anchors.topMargin: 4
+        anchors.bottomMargin: 4
+        radius: Appearance.rounding.small
+        color: mouseArea.containsMouse ? Appearance.colors.colLayer1Hover : "transparent"
+        border.width: 1
+        border.color: mouseArea.containsMouse ? Appearance.colors.colTextSecondary : Appearance.colors.colHairline
+        transform: Translate { y: mouseArea.pressed ? 1 : 0 }
+        Behavior on color { ColorAnimation { duration: 160 * Appearance.motionScale } }
+        Behavior on border.color { ColorAnimation { duration: 160 * Appearance.motionScale } }
+    }
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
         acceptedButtons: Qt.MiddleButton | Qt.BackButton | Qt.ForwardButton | Qt.RightButton | Qt.LeftButton
         onPressed: (event) => {
             if (event.button === Qt.MiddleButton) {
@@ -45,8 +63,10 @@ Item {
     RowLayout { // Real content
         id: rowLayout
 
-        spacing: 4
+        spacing: 8
         anchors.fill: parent
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
 
         // hairline: тонкое кольцо прогресса с иконкой
         Item {
