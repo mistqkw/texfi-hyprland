@@ -20,12 +20,15 @@ ColumnLayout {
             iconSize: Appearance.font.pixelSize.hugeass
         }
         StyledText {
-            // TexFi: заголовок секции — крупный, редкий текст, поэтому
-            // пиксельный шрифт уместен (в отличие от ContentSubsectionLabel
-            // и самих настроек, которые читают часто и мелким шрифтом).
+            // TexFi: заголовок секции переведён (Translation.tr), а Press
+            // Start 2P не содержит кириллицу и другие не-латинские алфавиты —
+            // подстановка системного шрифта на буквы ломает метрики строки
+            // и текст наезжает на соседние элементы. Держим обычный читаемый
+            // шрифт, но чуть крупнее и с более смелым начертанием.
             text: root.title
-            font.family: Appearance.font.family.title
+            font.family: Appearance.font.family.main
             font.pixelSize: Appearance.font.pixelSize.small
+            font.variableAxes: Appearance.font.variableAxes.title
             color: Appearance.colors.colOnSecondaryContainer
         }
     }

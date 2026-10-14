@@ -4,7 +4,7 @@ import qs.modules.common
 import qs.modules.common.widgets
 
 /**
- * Material 3 FAB.
+ * hairline: плоская кнопка с линией, без заливки акцентом.
  */
 RippleButton {
     id: root
@@ -14,11 +14,20 @@ RippleButton {
     property real elementSpacing: 5
     implicitWidth: expanded ? (Math.max(contentRowLayout.implicitWidth + 10 * 2, baseSize)) : baseSize
     implicitHeight: baseSize
-    buttonRadius: 0 // TexFi: раньше скруглённый Material FAB (baseSize/14*4)
-    colBackground: Appearance.colors.colPrimaryContainer
-    colBackgroundHover: Appearance.colors.colPrimaryContainerHover
-    colRipple: Appearance.colors.colPrimaryContainerActive
-    property color colOnBackground: Appearance.colors.colOnPrimaryContainer
+    buttonRadius: Appearance.rounding.normal
+    colBackground: Appearance.colors.colLayer1
+    colBackgroundHover: Appearance.colors.colLayer2
+    colRipple: Appearance.colors.colLayer2Active
+    property color colOnBackground: Appearance.colors.colTextPrimary
+
+    Rectangle {
+        anchors.fill: parent
+        z: 1
+        radius: root.buttonRadius
+        color: "transparent"
+        border.width: 1
+        border.color: root.hovered ? Appearance.colors.colTextPrimary : Appearance.colors.colHairline
+    }
     contentItem: Row {
         id: contentRowLayout
         property real horizontalMargins: (root.baseSize - icon.width) / 2

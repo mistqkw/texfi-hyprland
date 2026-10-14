@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Service
+MimeType=application/zip;application/x-zip;application/x-zip-compressed;application/vnd.rar;application/x-rar;application/x-rar-compressed;application/x-7z-compressed;application/x-tar;application/gzip;application/x-gzip;application/x-compressed-tar;application/x-bzip;application/x-bzip2;application/x-bzip-compressed-tar;application/x-xz;application/x-xz-compressed-tar;application/zstd;application/x-zstd-compressed-tar;
+Actions=extractHere;extractFolder
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+X-KDE-Priority=TopLevel
+Icon=archive-extract
+
+[Desktop Action extractHere]
+Name=Распаковать здесь
+Icon=archive-extract
+Exec=@HOME@/.local/bin/texfi-extract here %F
+
+[Desktop Action extractFolder]
+Name=Распаковать в папку
+Icon=folder-open
+Exec=@HOME@/.local/bin/texfi-extract folder %F

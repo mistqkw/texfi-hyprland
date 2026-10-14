@@ -6,8 +6,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 /**
- * Material 3 button with expressive bounciness. 
- * See https://m3.material.io/components/button-groups/overview
+ * hairline: включённое состояние — линия и акцент, не заливка.
  */
 Button {
     id: root
@@ -19,7 +18,7 @@ Button {
     property var releaseAction // When left clicking (release)
     property var altAction // When right clicking
     property var middleClickAction // When middle clicking
-    property bool bounce: true
+    property bool bounce: false
     property real baseWidth: contentItem.implicitWidth + horizontalPadding * 2
     property real baseHeight: contentItem.implicitHeight + verticalPadding * 2
     property bool enableImplicitWidthAnimation: true
@@ -39,9 +38,9 @@ Button {
     property color colBackground: ColorUtils.transparentize(colBackgroundHover, 1) || "transparent"
     property color colBackgroundHover: Appearance?.colors.colLayer1Hover ?? "#E5DFED"
     property color colBackgroundActive: Appearance?.colors.colLayer1Active ?? "#D6CEE2"
-    property color colBackgroundToggled: Appearance?.colors.colPrimary ?? "#65558F"
-    property color colBackgroundToggledHover: Appearance?.colors.colPrimaryHover ?? "#77699C"
-    property color colBackgroundToggledActive: Appearance?.colors.colPrimaryActive ?? "#D6CEE2"
+    property color colBackgroundToggled: Appearance?.colors.colLayer2 ?? "#18181c"
+    property color colBackgroundToggledHover: Appearance?.colors.colLayer2Hover ?? "#1e1e22"
+    property color colBackgroundToggledActive: Appearance?.colors.colLayer2Active ?? "#24242a"
 
     property real radius: root.down ? root.buttonRadiusPressed : root.buttonRadius
     property real leftRadius: root.down ? root.buttonRadiusPressed : root.buttonRadius
@@ -131,8 +130,9 @@ Button {
             animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
         }
 
-        border.width: root.tabbedTo ? 2 : 0
-        border.color: Appearance.colors.colSecondary
+        border.width: root.tabbedTo ? 2 : 1
+        border.color: root.tabbedTo ? Appearance.colors.colSecondary
+            : (root.toggled ? Appearance.colors.colPrimary : Appearance.colors.colHairline)
     }
 
     contentItem: StyledText {

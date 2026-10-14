@@ -8,7 +8,7 @@ import qs.modules.common.functions
 Flow {
     id: root
     Layout.fillWidth: true
-    spacing: 2
+    spacing: 6
     property list<var> options: [
         {
             "displayName": "Option 1",

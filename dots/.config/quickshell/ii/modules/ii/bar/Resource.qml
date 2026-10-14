@@ -32,7 +32,7 @@ Item {
             implicitWidth: implicitSize
             implicitHeight: implicitSize
 
-            PixelTimerRing {
+            HairRing {
                 anchors.fill: parent
                 segmentsCount: 12
                 ringWidthRatio: 0.36

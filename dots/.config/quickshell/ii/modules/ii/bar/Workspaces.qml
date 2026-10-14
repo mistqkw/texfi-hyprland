@@ -122,11 +122,11 @@ Item {
                 z: 1
                 implicitWidth: workspaceButtonWidth
                 implicitHeight: workspaceButtonWidth
-                // TexFi: раньше свободный конец островка был скруглён (width/2);
-                // теперь острые углы везде — острова всегда прямоугольные.
-                radius: 0
+                radius: Appearance.rounding.small
 
-                color: ColorUtils.transparentize(Appearance.m3colors.m3secondaryContainer, 0.4)
+                color: "transparent"
+                border.width: 1
+                border.color: Appearance.colors.colHairline
                 opacity: (workspaceOccupied[index] && !(!activeWindow?.activated && root.effectiveActiveWorkspaceId === index+1)) ? 1 : 0
 
                 Behavior on opacity {
@@ -143,7 +143,7 @@ Item {
     Rectangle {
         z: 2
         // Make active ws indicator, which has a brighter color, smaller to look like it is of the same size as ws occupied highlight
-        radius: Appearance.rounding.full
+        radius: Appearance.rounding.small
         color: Appearance.colors.colPrimary
 
         anchors {
@@ -214,7 +214,7 @@ Item {
                         elide: Text.ElideRight
                         color: (root.effectiveActiveWorkspaceId == button.workspaceValue) ? 
                             Appearance.m3colors.m3onPrimary : 
-                            (workspaceOccupied[index] ? Appearance.m3colors.m3onSecondaryContainer : 
+                            (workspaceOccupied[index] ? Appearance.colors.colOnLayer1 : 
                                 Appearance.colors.colOnLayer1Inactive)
 
                         Behavior on opacity {
@@ -231,10 +231,10 @@ Item {
                         anchors.centerIn: parent
                         width: workspaceButtonWidth * 0.18
                         height: width
-                        radius: 0 // TexFi: пиксельный квадратный бит вместо кружка
+                        radius: Appearance.rounding.verysmall
                         color: (root.effectiveActiveWorkspaceId == button.workspaceValue) ? 
                             Appearance.m3colors.m3onPrimary : 
-                            (workspaceOccupied[index] ? Appearance.m3colors.m3onSecondaryContainer : 
+                            (workspaceOccupied[index] ? Appearance.colors.colOnLayer1 : 
                                 Appearance.colors.colOnLayer1Inactive)
 
                         Behavior on opacity {

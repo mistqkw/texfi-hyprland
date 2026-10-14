@@ -14,7 +14,7 @@ TabButton {
     property string buttonText
     property bool expanded: false
     property bool showToggledHighlight: true
-    readonly property real visualWidth: root.expanded ? root.baseSize + 20 + itemText.implicitWidth : root.baseSize
+    readonly property real visualWidth: root.expanded ? root.baseSize + 20 + itemText.implicitWidth : Math.max(root.baseSize, itemText.implicitWidth + 8)
 
     property real baseSize: 56
     property real baseHighlightHeight: 32
@@ -53,7 +53,7 @@ TabButton {
             color: toggled ? 
                 root.showToggledHighlight ?
                     (root.down ? Appearance.colors.colSecondaryContainerActive : root.hovered ? Appearance.colors.colSecondaryContainerHover : Appearance.colors.colSecondaryContainer)
-                    : ColorUtils.transparentize(Appearance.colors.colSecondaryContainer) :
+                    : "transparent" :
                 (root.down ? Appearance.colors.colLayer1Active : root.hovered ? Appearance.colors.colLayer1Hover : ColorUtils.transparentize(Appearance.colors.colLayer1Hover, 1))
 
             states: State {
@@ -106,7 +106,8 @@ TabButton {
                 fill: toggled ? 1 : 0
                 font.weight: (toggled || root.hovered) ? Font.DemiBold : Font.Normal
                 text: buttonIcon
-                color: toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer1
+                color: toggled && !root.showToggledHighlight ? Appearance.colors.colPrimary
+                    : toggled ? Appearance.m3colors.m3onSecondaryContainer : Appearance.colors.colOnLayer1
 
                 Behavior on color {
                     animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
@@ -143,7 +144,18 @@ TabButton {
             }
             text: buttonText
             font.pixelSize: 14
-            color: Appearance.colors.colOnLayer1
+            color: toggled && !root.showToggledHighlight ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer1
+
+            // выбранная вкладка без плашки: песочная черта под подписью
+            Rectangle {
+                visible: root.toggled && !root.showToggledHighlight && !root.expanded
+                anchors.top: parent.bottom
+                anchors.topMargin: 1
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.implicitWidth
+                height: 1
+                color: Appearance.colors.colPrimary
+            }
         }
     }
 

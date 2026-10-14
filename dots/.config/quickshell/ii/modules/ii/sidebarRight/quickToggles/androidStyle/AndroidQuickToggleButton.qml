@@ -60,15 +60,24 @@ GroupButton {
     verticalPadding: padding
 
     colBackground: Appearance.colors.colLayer2
-    colBackgroundToggled: (altAction && expandedSize) ? Appearance.colors.colLayer2 : Appearance.colors.colPrimary
-    colBackgroundToggledHover: (altAction && expandedSize) ? Appearance.colors.colLayer2Hover : Appearance.colors.colPrimaryHover
-    colBackgroundToggledActive: (altAction && expandedSize) ? Appearance.colors.colLayer2Active : Appearance.colors.colPrimaryActive
-    // TexFi: PixelButton — квадратные/минимально скруглённые углы, не полный
-    // круг. Раньше невключённые кнопки были кругами (height / 2).
+    // hairline: включённый тумблер — не заливка, а линия и иконка акцентного цвета
+    colBackgroundToggled: Appearance.colors.colLayer2
+    colBackgroundToggledHover: Appearance.colors.colLayer2Hover
+    colBackgroundToggledActive: Appearance.colors.colLayer2Active
     buttonRadius: Appearance.rounding.small
     buttonRadiusPressed: Appearance.rounding.small
-    property color colText: (toggled && !(altAction && expandedSize) && enabled) ? Appearance.colors.colOnPrimary : ColorUtils.transparentize(Appearance.colors.colOnLayer2, enabled ? 0 : 0.7)
-    property color colIcon: expandedSize ? ((root.toggled) ? Appearance.colors.colOnPrimary : Appearance.colors.colOnLayer3) : colText
+    property color colText: (toggled && enabled) ? Appearance.colors.colPrimary : ColorUtils.transparentize(Appearance.colors.colOnLayer2, enabled ? 0 : 0.7)
+    property color colIcon: expandedSize ? ((root.toggled) ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer3) : colText
+
+    // линия 1px: акцент у включённого, hairline у остальных
+    Rectangle {
+        anchors.fill: parent
+        z: 1
+        radius: root.buttonRadius
+        color: "transparent"
+        border.width: 1
+        border.color: root.toggled ? Appearance.colors.colPrimary : Appearance.colors.colHairline
+    }
 
     onClicked: {
         if (root.expandedSize && root.altAction) root.altAction();
@@ -106,7 +115,7 @@ GroupButton {
                 implicitWidth: height
                 radius: root.radius - root.verticalPadding
                 color: {
-                    const baseColor = root.toggled ? Appearance.colors.colPrimary : Appearance.colors.colLayer3
+                    const baseColor = Appearance.colors.colLayer3
                     const transparentizeAmount = (root.altAction && root.expandedSize) ? 0 : 1
                     return ColorUtils.transparentize(baseColor, transparentizeAmount)
                 }

@@ -33,8 +33,8 @@ Column {
                 // общую роль "expressive" (та же роль стоит на мелких значках
                 // номеров рабочих столов, и переключать её всю сразу — заносить
                 // пиксельный шрифт туда, где его быть не должно).
-                family: "Press Start 2P"
-                weight: Font.Normal
+                family: "Unbounded"
+                weight: Font.DemiBold
                 pixelSize: numberSize
             }
 

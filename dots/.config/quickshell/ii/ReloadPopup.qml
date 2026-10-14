@@ -50,11 +50,13 @@ Scope {
 			Rectangle {
 				id: rect
 				anchors.centerIn: parent
-				color: failed ?  "#ffe99195" : "#ffD1E8D5"
+				color: "#111114"
+				border.width: 1
+				border.color: failed ? "#f06060" : "#26262c"
 
 				implicitHeight: layout.implicitHeight + 30
 				implicitWidth: layout.implicitWidth + 30
-				radius: 12
+				radius: 10
 
 				// Fills the whole area of the rectangle, making any clicks go to it,
 				// which dismiss the popup.
@@ -81,10 +83,10 @@ Scope {
 
 					Text {
 						renderType: Text.NativeRendering
-						font.family: "Google Sans Flex"
-						font.pointSize: 14
+						font.family: "Inter"
+						font.pointSize: 12
 						text: root.failed ? "Quickshell: Reload failed" : "Quickshell reloaded"
-						color: failed ? "#ff93000A" : "#ff0C1F13"
+						color: "#f4f4f6"
 					}
 
 					Text {
@@ -92,7 +94,7 @@ Scope {
 						font.family: "JetBrains Mono NF"
 						font.pointSize: 11
 						text: root.errorString
-						color: failed ? "#ff93000A" : "#ff0C1F13"
+						color: "#a3a3ad"
 						// When visible is false, it also takes up no space.
 						visible: root.errorString != ""
 					}
@@ -103,12 +105,12 @@ Scope {
 				Rectangle {
 					z: 2
 					id: bar
-					color: failed ? "#ff93000A" : "#ff0C1F13"
+					color: failed ? "#f06060" : "#4a7dfb"
 					anchors.bottom: parent.bottom
 					anchors.left: parent.left
 					anchors.margins: 10
-					height: 5
-					radius: 9999
+					height: 2
+					radius: 1
 
 					PropertyAnimation {
 						id: anim
@@ -133,8 +135,8 @@ Scope {
 					anchors.bottom: parent.bottom
 					anchors.left: parent.left
 					anchors.margins: 10
-					height: 5
-					radius: 9999
+					height: 2
+					radius: 1
 					width: rect.width - bar.anchors.margins * 2
 				}
 

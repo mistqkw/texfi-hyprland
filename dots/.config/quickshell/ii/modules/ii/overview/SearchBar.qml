@@ -12,6 +12,9 @@ RowLayout {
     id: root
     spacing: 6
     property bool animateWidth: false
+    property real reveal: 1
+    // поочерёдное проявление: i-й элемент стартует с задержкой 0.12 от reveal
+    function stage(i) { return Math.max(0, Math.min(1, (reveal - i * 0.12) / 0.55)); }
     property alias searchInput: searchInput
     property string searchingText
 
@@ -32,15 +35,14 @@ RowLayout {
         return SearchBar.SearchPrefixType.DefaultSearch;
     }
     
-    MaterialShapeWrappedMaterialSymbol {
+    Item {
         id: searchIcon
         Layout.alignment: Qt.AlignVCenter
-        iconSize: Appearance.font.pixelSize.huge
-        // TexFi: один силуэт на весь контекст (поиск) — органические Material
-        // "блобы" (Clover/Gem/Sunny/Cookie/Burst) заменены на пиксельный
-        // кружок; режим отличают иконка и цвет, а не форма бейджа.
-        shape: MaterialShape.Shape.PixelCircle
-        text: switch (root.searchPrefixType) {
+        implicitWidth: 40
+        implicitHeight: 40
+        opacity: root.stage(0)
+        transform: Translate { x: (1 - root.stage(0)) * -10 }
+        property string iconName: switch (root.searchPrefixType) {
             case SearchBar.SearchPrefixType.Action: return "settings_suggest";
             case SearchBar.SearchPrefixType.App: return "apps";
             case SearchBar.SearchPrefixType.Clipboard: return "content_paste_search";
@@ -48,8 +50,17 @@ RowLayout {
             case SearchBar.SearchPrefixType.Math: return "calculate";
             case SearchBar.SearchPrefixType.ShellCommand: return "terminal";
             case SearchBar.SearchPrefixType.WebSearch: return "travel_explore";
-            case SearchBar.SearchPrefixType.DefaultSearch: return "search";
             default: return "search";
+        }
+        MaterialSymbol {
+            anchors.centerIn: parent
+            iconSize: Appearance.font.pixelSize.huge
+            text: searchIcon.iconName
+            animateChange: true // смена режима поиска — короткое перетекание значка
+            color: searchInput.activeFocus ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer1
+            Behavior on color {
+                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+            }
         }
     }
     ToolbarTextField { // Search box
@@ -57,6 +68,9 @@ RowLayout {
         Layout.topMargin: 4
         Layout.bottomMargin: 4
         implicitHeight: 40
+        colBackground: "transparent"
+        opacity: root.stage(1)
+        transform: Translate { x: (1 - root.stage(1)) * -10 }
         focus: GlobalStates.overviewOpen
         font.pixelSize: Appearance.font.pixelSize.small
         placeholderText: Translation.tr("Search, calculate or run")
@@ -98,6 +112,8 @@ RowLayout {
     IconToolbarButton {
         Layout.topMargin: 4
         Layout.bottomMargin: 4
+        opacity: root.stage(2)
+        transform: Translate { x: (1 - root.stage(2)) * -10 }
         onClicked: {
             GlobalStates.overviewOpen = false;
             Quickshell.execDetached(["qs", "-p", Quickshell.shellPath(""), "ipc", "call", "region", "search"]);
@@ -121,29 +137,43 @@ RowLayout {
             text: Translation.tr("Recognize music")
         }
 
-        colText: toggled ? Appearance.colors.colOnPrimary : Appearance.colors.colOnSurfaceVariant
-        background: MaterialShape {
-            RotationAnimation on rotation {
-                running: songRecButton.toggled
-                duration: 12000
-                easing.type: Easing.Linear
-                loops: Animation.Infinite
-                from: 0
-                to: 360
-            }
-            // TexFi: тот же пиксельный кружок при любом состоянии — нажатие
-            // и toggled уже читаются по цвету и вращению, форме незачем
-            // "перетекать" между Material-блобами.
-            shape: MaterialShape.Shape.PixelCircle
-            color: {
-                if (songRecButton.toggled) {
-                    return songRecButton.hovered ? Appearance.colors.colPrimaryHover : Appearance.colors.colPrimary
-                } else {
-                    return songRecButton.hovered ? Appearance.colors.colSurfaceContainerHigh : ColorUtils.transparentize(Appearance.colors.colSurfaceContainerHigh)
+        opacity: root.stage(3)
+        transform: Translate { x: (1 - root.stage(3)) * -10 }
+
+        colText: toggled ? Appearance.colors.colPrimary : Appearance.colors.colOnSurfaceVariant
+        background: Item {
+            Rectangle {
+                id: songRecPlate
+                anchors.fill: parent
+                radius: Appearance.rounding.small
+                color: songRecButton.hovered ? Appearance.colors.colLayer2 : "transparent"
+                border.width: 1
+                border.color: songRecButton.toggled ? Appearance.colors.colPrimary
+                    : (songRecButton.hovered ? Appearance.colors.colHairline : "transparent")
+                Behavior on color {
+                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                }
+                Behavior on border.color {
+                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
                 }
             }
-            Behavior on color {
-                animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+            // пока слушает — кольцо «дышит» вокруг кнопки
+            Rectangle {
+                id: songRecPulse
+                anchors.fill: parent
+                anchors.margins: -3
+                radius: Appearance.rounding.small + 3
+                color: "transparent"
+                border.width: 1
+                border.color: Appearance.colors.colPrimary
+                opacity: 0
+                visible: songRecButton.toggled
+                SequentialAnimation on opacity {
+                    running: songRecButton.toggled && Appearance.motionScale > 0
+                    loops: Animation.Infinite
+                    NumberAnimation { from: 0.0; to: 0.8; duration: 900; easing.type: Easing.OutCubic }
+                    NumberAnimation { from: 0.8; to: 0.0; duration: 900; easing.type: Easing.InCubic }
+                }
             }
         }
     }

@@ -19,7 +19,7 @@ Item {
             leftMargin: root.vertical ? 4 : 0
             rightMargin: root.vertical ? 4 : 0
         }
-        color: Config.options?.bar.borderless ? "transparent" : Appearance.colors.colLayer1
+        color: "transparent" // hairline: группы без плит, разделяет воздух
         radius: Appearance.rounding.small
     }
 

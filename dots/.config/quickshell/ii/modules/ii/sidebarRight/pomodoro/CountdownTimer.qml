@@ -25,7 +25,7 @@ Item {
             implicitWidth: 200
             implicitHeight: 200
 
-            PixelTimerRing {
+            HairRing {
                 anchors.fill: parent
                 progress: TimerService.countdownSecondsLeft / TimerService.countdownDuration
                 accentColor: "#4a7dfb"

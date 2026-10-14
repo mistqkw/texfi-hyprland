@@ -21,6 +21,8 @@ Item {
             topMargin: itemHeight * root.currentIndex + (root.expanded ? 0 : ((itemHeight - baseHighlightHeight) / 2))
         }
         radius: Appearance.rounding.full
+        // кнопки без плашки (showToggledHighlight: false) отмечают выбор цветом и чертой сами
+        visible: tabBarColumn.children[0]?.showToggledHighlight ?? true
         color: Appearance.colors.colSecondaryContainer
         implicitHeight: root.expanded ? itemHeight : baseHighlightHeight
         implicitWidth: tabBarColumn?.children[root.currentIndex]?.visualWidth ?? 100

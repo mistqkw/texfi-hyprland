@@ -42,11 +42,10 @@ Item { // Bar content region
             margins: Config.options.bar.cornerStyle === 1 ? (Appearance.sizes.hyprlandGapsOut) : 0 // idk why but +1 is needed
         }
         color: Config.options.bar.showBackground ? Appearance.colors.colLayer0 : "transparent"
-        // TexFi: панель плавает (margins выше), но остаётся прямоугольной —
-        // никаких Material-скруглений на floating-панели, как у PixelCard.
-        radius: 0
+        // hairline: плавающая панель — линия 1px и радиус 10, без тени
+        radius: Config.options.bar.cornerStyle === 1 ? Appearance.rounding.normal : 0
         border.width: Config.options.bar.cornerStyle === 1 ? 1 : 0
-        border.color: Appearance.colors.colLayer0Border
+        border.color: Appearance.colors.colHairline
     }
 
     FocusedScrollMouseArea { // Left side | scroll to change brightness
@@ -186,7 +185,7 @@ Item { // Bar content region
                 }
 
                 BatteryIndicator {
-                    visible: (root.useShortenedForm < 2 && Battery.available)
+                    visible: (root.useShortenedForm < 2 && Battery.available && Math.round(Battery.percentage * 100) < 100) // на 100% индикатор скрыт
                     Layout.alignment: Qt.AlignVCenter
                 }
             }

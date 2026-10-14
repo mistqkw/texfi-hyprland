@@ -141,11 +141,11 @@ Item { // Bar content region
             }
 
             HorizontalBarSeparator {
-                visible: Battery.available
+                visible: Battery.available && Math.round(Battery.percentage * 100) < 100
             }
 
             BatteryIndicator {
-                visible: Battery.available
+                visible: Battery.available && Math.round(Battery.percentage * 100) < 100
                 Layout.fillWidth: true
                 Layout.fillHeight: false
             }

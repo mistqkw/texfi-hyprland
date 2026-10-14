@@ -1,5 +1,6 @@
 import qs.modules.common
 import qs.services
+import qs.modules.common.functions
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
@@ -10,6 +11,15 @@ pragma ComponentBehavior: Bound
 Singleton {
     id: root
     property bool barOpen: true
+
+    // Анимация выключения: модуль PowerTransition проигрывает её и сам вызывает Session.<action>().
+    // Если модуль не загружен или движение отключено, действие выполняется сразу.
+    property bool powerTransitionReady: false
+    signal powerOutroRequested(string action)
+    function powerAction(action) {
+        if (powerTransitionReady) powerOutroRequested(action);
+        else Session[action]();
+    }
     property bool crosshairOpen: false
     property bool sidebarLeftOpen: false
     property bool sidebarRightOpen: false

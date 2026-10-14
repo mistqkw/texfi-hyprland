@@ -21,6 +21,17 @@ Item { // Wrapper
 
     property string searchingText: LauncherSearch.query
     property bool showResults: searchingText != ""
+
+    // hairline-движение открытия: 0 → 1 за ~300мс, easeOutCubic. От него зависят
+    // выезд плашки, пробег акцентной линии и поочерёдное проявление содержимого.
+    property real reveal: GlobalStates.overviewOpen ? 1 : 0
+    Behavior on reveal {
+        NumberAnimation {
+            duration: (GlobalStates.overviewOpen ? 320 : 140) * Appearance.motionScale
+            easing.type: Easing.BezierSpline
+            easing.bezierCurve: GlobalStates.overviewOpen ? Appearance.animationCurves.texfiEnter : Appearance.animationCurves.texfiExit
+        }
+    }
     implicitWidth: searchWidgetContent.implicitWidth + Appearance.sizes.elevationMargin * 2
     implicitHeight: searchWidgetContent.implicitHeight + searchBar.verticalPadding * 2 + Appearance.sizes.elevationMargin * 2
 
@@ -97,9 +108,6 @@ Item { // Wrapper
         }
     }
 
-    StyledRectangularShadow {
-        target: searchWidgetContent
-    }
     Rectangle { // Background
         id: searchWidgetContent
         anchors {
@@ -110,12 +118,20 @@ Item { // Wrapper
         clip: true
         implicitWidth: columnLayout.implicitWidth
         implicitHeight: columnLayout.implicitHeight
-        // TexFi: раньше это была Material-капсула (radius = высота/2);
-        // PixelCard прямоугольный, с плоским бордером вместо мягкого elevation.
-        radius: 0
-        border.width: 2
-        border.color: Appearance.colors.colLayer0Border
+        // hairline: плоская плашка, линия 1px, при фокусе рамка светлеет до акцента
+        radius: Appearance.rounding.normal
+        border.width: 1
+        border.color: searchBar.searchInput.activeFocus ? Appearance.colors.colTextTertiary : Appearance.colors.colHairline
         color: Appearance.colors.colBackgroundSurfaceContainer
+        Behavior on border.color {
+            animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+        }
+
+        // выезд сверху + лёгкое увеличение
+        opacity: root.reveal
+        transformOrigin: Item.Top
+        scale: 0.95 + 0.05 * root.reveal
+        transform: Translate { y: (1 - root.reveal) * -14 }
 
         Behavior on implicitHeight {
             id: searchHeightBehavior
@@ -136,8 +152,8 @@ Item { // Wrapper
             layer.effect: OpacityMask {
                 maskSource: Rectangle {
                     width: searchWidgetContent.width
-                    height: searchWidgetContent.width
-                    radius: 0
+                    height: searchWidgetContent.height
+                    radius: Appearance.rounding.normal
                 }
             }
 
@@ -149,17 +165,29 @@ Item { // Wrapper
                 Layout.rightMargin: 4
                 Layout.topMargin: verticalPadding
                 Layout.bottomMargin: verticalPadding
+                reveal: root.reveal
                 Synchronizer on searchingText {
                     property alias source: root.searchingText
                 }
             }
 
-            Rectangle {
-                // Separator
-                visible: root.showResults
+            Item {
+                // Линия под полем: hairline + акцентный пробег слева направо при открытии
                 Layout.fillWidth: true
-                height: 1
-                color: Appearance.colors.colOutlineVariant
+                implicitHeight: 1
+                Rectangle {
+                    anchors.fill: parent
+                    color: Appearance.colors.colHairline
+                }
+                Rectangle {
+                    anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
+                    width: parent.width * root.reveal
+                    color: Appearance.colors.colPrimary
+                    opacity: searchBar.searchInput.activeFocus ? 1 : 0.45
+                    Behavior on opacity {
+                        animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+                    }
+                }
             }
 
             ListView { // App results
@@ -213,6 +241,8 @@ Item { // Wrapper
                     id: searchItem
                     // The selectable item for each search result
                     required property var modelData
+                    required property int index
+                    staggerIndex: index
                     anchors.left: parent?.left
                     anchors.right: parent?.right
                     entry: modelData

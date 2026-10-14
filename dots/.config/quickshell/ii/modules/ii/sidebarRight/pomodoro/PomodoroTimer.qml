@@ -21,7 +21,9 @@ Item {
         // The Pomodoro timer circle
         CircularProgress {
             Layout.alignment: Qt.AlignHCenter
-            lineWidth: 8
+            lineWidth: 3
+            colPrimary: Appearance.colors.colPrimary
+            colSecondary: Appearance.colors.colHairline
             value: {
                 return TimerService.pomodoroSecondsLeft / TimerService.pomodoroLapDuration;
             }
@@ -75,39 +77,19 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             spacing: 10
 
-            RippleButton {
-                contentItem: StyledText {
-                    anchors.centerIn: parent
-                    horizontalAlignment: Text.AlignHCenter
-                    text: TimerService.pomodoroRunning ? Translation.tr("Pause") : (TimerService.pomodoroSecondsLeft === TimerService.focusTime) ? Translation.tr("Start") : Translation.tr("Resume")
-                    color: TimerService.pomodoroRunning ? Appearance.colors.colOnSecondaryContainer : Appearance.colors.colOnPrimary
-                }
-                implicitHeight: 35
-                implicitWidth: 90
-                font.pixelSize: Appearance.font.pixelSize.larger
+            HairButton {
+                primary: !TimerService.pomodoroRunning
+                implicitWidth: 100
+                buttonText: TimerService.pomodoroRunning ? Translation.tr("Pause") : (TimerService.pomodoroSecondsLeft === TimerService.focusTime) ? Translation.tr("Start") : Translation.tr("Resume")
                 onClicked: TimerService.togglePomodoro()
-                colBackground: TimerService.pomodoroRunning ? Appearance.colors.colSecondaryContainer : Appearance.colors.colPrimary
-                colBackgroundHover: TimerService.pomodoroRunning ? Appearance.colors.colSecondaryContainer : Appearance.colors.colPrimary
             }
 
-            RippleButton {
-                implicitHeight: 35
-                implicitWidth: 90
-
+            HairButton {
+                primary: false
+                implicitWidth: 100
+                buttonText: Translation.tr("Reset")
                 onClicked: TimerService.resetPomodoro()
                 enabled: (TimerService.pomodoroSecondsLeft < TimerService.pomodoroLapDuration) || TimerService.pomodoroCycle > 0 || TimerService.pomodoroBreak
-
-                font.pixelSize: Appearance.font.pixelSize.larger
-                colBackground: Appearance.colors.colErrorContainer
-                colBackgroundHover: Appearance.colors.colErrorContainerHover
-                colRipple: Appearance.colors.colErrorContainerActive
-
-                contentItem: StyledText {
-                    anchors.centerIn: parent
-                    horizontalAlignment: Text.AlignHCenter
-                    text: Translation.tr("Reset")
-                    color: Appearance.colors.colOnErrorContainer
-                }
             }
         }
     }

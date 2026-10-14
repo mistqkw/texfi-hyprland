@@ -72,6 +72,19 @@ Scope {
                 Keys.onPressed: event => {
                     if (event.key === Qt.Key_Escape) {
                         sessionRoot.hide();
+                        return;
+                    }
+                    // Буква только переводит фокус на кнопку; действие подтверждает Enter,
+                    // чтобы случайное нажатие не выключило компьютер.
+                    const byKey = {
+                        [Qt.Key_L]: sessionLock, [Qt.Key_S]: sessionSleep, [Qt.Key_O]: sessionLogout,
+                        [Qt.Key_T]: sessionTaskManager, [Qt.Key_H]: sessionHibernate,
+                        [Qt.Key_P]: sessionShutdown, [Qt.Key_R]: sessionReboot, [Qt.Key_F]: sessionFirmwareReboot
+                    };
+                    const target = byKey[event.key];
+                    if (target && event.modifiers === Qt.NoModifier) {
+                        target.forceActiveFocus();
+                        event.accepted = true;
                     }
                 }
 
@@ -106,6 +119,7 @@ Scope {
 
                     SessionActionButton {
                         id: sessionLock
+                        hotkey: "L"
                         focus: sessionRoot.visible
                         buttonIcon: "lock"
                         buttonText: Translation.tr("Lock")
@@ -122,6 +136,7 @@ Scope {
                     }
                     SessionActionButton {
                         id: sessionSleep
+                        hotkey: "S"
                         buttonIcon: "dark_mode"
                         buttonText: Translation.tr("Sleep")
                         onClicked: {
@@ -138,10 +153,11 @@ Scope {
                     }
                     SessionActionButton {
                         id: sessionLogout
+                        hotkey: "O"
                         buttonIcon: "logout"
                         buttonText: Translation.tr("Logout")
                         onClicked: {
-                            Session.logout();
+                            GlobalStates.powerAction("logout");
                             sessionRoot.hide();
                         }
                         onFocusChanged: {
@@ -154,6 +170,7 @@ Scope {
                     }
                     SessionActionButton {
                         id: sessionTaskManager
+                        hotkey: "T"
                         buttonIcon: "browse_activity"
                         buttonText: Translation.tr("Task Manager")
                         onClicked: {
@@ -170,6 +187,7 @@ Scope {
 
                     SessionActionButton {
                         id: sessionHibernate
+                        hotkey: "H"
                         buttonIcon: "downloading"
                         buttonText: Translation.tr("Hibernate")
                         onClicked: {
@@ -185,10 +203,11 @@ Scope {
                     }
                     SessionActionButton {
                         id: sessionShutdown
+                        hotkey: "P"
                         buttonIcon: "power_settings_new"
                         buttonText: Translation.tr("Shutdown")
                         onClicked: {
-                            Session.poweroff();
+                            GlobalStates.powerAction("poweroff");
                             sessionRoot.hide();
                         }
                         onFocusChanged: {
@@ -201,10 +220,11 @@ Scope {
                     }
                     SessionActionButton {
                         id: sessionReboot
+                        hotkey: "R"
                         buttonIcon: "restart_alt"
                         buttonText: Translation.tr("Reboot")
                         onClicked: {
-                            Session.reboot();
+                            GlobalStates.powerAction("reboot");
                             sessionRoot.hide();
                         }
                         onFocusChanged: {
@@ -217,10 +237,11 @@ Scope {
                     }
                     SessionActionButton {
                         id: sessionFirmwareReboot
+                        hotkey: "F"
                         buttonIcon: "settings_applications"
                         buttonText: Translation.tr("Reboot to firmware settings")
                         onClicked: {
-                            Session.rebootToFirmware();
+                            GlobalStates.powerAction("rebootToFirmware");
                             sessionRoot.hide();
                         }
                         onFocusChanged: {

@@ -107,6 +107,8 @@ Singleton {
             property JsonObject appearance: JsonObject {
                 property bool extraBackgroundTint: true
                 property int fakeScreenRounding: 2 // 0: None | 1: Always | 2: When not fullscreen
+                // hairline: true — все анимации оболочки мгновенные
+                property bool reducedMotion: false
                 property JsonObject fonts: JsonObject {
                     property string main: "Google Sans Flex"
                     property string numbers: "Google Sans Flex"
@@ -167,6 +169,7 @@ Singleton {
                         property bool enable: true
                         property bool showOnlyWhenLocked: false
                         property string placementStrategy: "leastBusy" // "free", "leastBusy", "mostBusy"
+                        property bool locked: false // true — положение фиксировано, виджет нельзя перетаскивать
                         property real x: 100
                         property real y: 100
                         property string style: "cookie"        // Options: "cookie", "digital"
@@ -206,6 +209,7 @@ Singleton {
                     property JsonObject weather: JsonObject {
                         property bool enable: false
                         property string placementStrategy: "free" // "free", "leastBusy", "mostBusy"
+                        property bool locked: false
                         property real x: 400
                         property real y: 100
                     }

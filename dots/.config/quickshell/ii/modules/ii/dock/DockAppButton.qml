@@ -127,7 +127,7 @@ DockButton {
                     model: Math.min(appToplevel.toplevels.length, 3)
                     delegate: Rectangle {
                         required property int index
-                        radius: Appearance.rounding.full
+                        radius: Appearance.rounding.verysmall
                         implicitWidth: (appToplevel.toplevels.length <= 3) ? 
                             root.countDotWidth : root.countDotHeight // Circles when too many
                         implicitHeight: root.countDotHeight

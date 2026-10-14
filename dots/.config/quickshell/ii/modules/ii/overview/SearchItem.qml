@@ -45,12 +45,40 @@ RippleButton {
     implicitHeight: rowLayout.implicitHeight + root.buttonVerticalPadding * 2
     implicitWidth: rowLayout.implicitWidth + root.buttonHorizontalPadding * 2
     buttonRadius: Appearance.rounding.normal
-    colBackground: (root.down || root.keyboardDown) ? Appearance.colors.colPrimaryContainerActive : 
-        (selected ? Appearance.colors.colPrimaryContainer : 
-        ColorUtils.transparentize(Appearance.colors.colPrimaryContainer, 1))
-    colBackgroundHover: Appearance.colors.colPrimaryContainer
-    colRipple: Appearance.colors.colPrimaryContainerActive
-    property color colForeground: selected ? Appearance.colors.colOnPrimaryContainer : Appearance.m3colors.m3onSurface
+    // поочерёдное появление строк результатов (до 8 шагов по 28мс)
+    property int staggerIndex: 0
+    property real appear: 0
+    opacity: appear
+    transform: Translate { y: (1 - root.appear) * 6 }
+    SequentialAnimation on appear {
+        running: true
+        PauseAnimation { duration: Math.min(root.staggerIndex, 8) * 28 * Appearance.motionScale }
+        NumberAnimation {
+            to: 1
+            duration: 180 * Appearance.motionScale
+            easing.type: Easing.BezierSpline
+            easing.bezierCurve: Appearance.animationCurves.texfiEnter
+        }
+    }
+
+    // hairline: выбранная строка — фон слоя и тонкая акцентная линия слева
+    colBackground: (root.down || root.keyboardDown) ? Appearance.colors.colLayer2Active : 
+        (selected ? Appearance.colors.colLayer2 : "transparent")
+    colBackgroundHover: Appearance.colors.colLayer2
+    colRipple: Appearance.colors.colLayer2Active
+    property color colForeground: selected ? Appearance.colors.colTextPrimary : Appearance.m3colors.m3onSurface
+
+    Rectangle {
+        z: 1
+        anchors { left: parent.left; top: parent.top; bottom: parent.bottom; topMargin: 6; bottomMargin: 6 }
+        width: 2
+        radius: 1
+        color: Appearance.colors.colPrimary
+        opacity: root.selected ? 1 : 0
+        Behavior on opacity {
+            animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
+        }
+    }
 
     readonly property string highlightPrefix: `<u><font color="${Appearance.colors.colPrimary}">`
     readonly property string highlightSuffix: `</font></u>`
@@ -187,7 +215,7 @@ RippleButton {
             spacing: 0
             StyledText {
                 font.pixelSize: Appearance.font.pixelSize.smaller
-                color: root.selected ? Appearance.colors.colOnPrimaryContainer : Appearance.colors.colSubtext
+                color: root.selected ? Appearance.colors.colOnLayer1 : Appearance.colors.colSubtext
                 visible: root.itemType && root.itemType != Translation.tr("App")
                 text: root.itemType
             }
@@ -198,7 +226,7 @@ RippleButton {
                     sourceComponent: Rectangle {
                         implicitWidth: activeText.implicitHeight
                         implicitHeight: activeText.implicitHeight
-                        radius: Appearance.rounding.full
+                        radius: Appearance.rounding.small
                         color: Appearance.colors.colPrimary
                         MaterialSymbol {
                             id: activeText
@@ -247,7 +275,7 @@ RippleButton {
             visible: root.selected
             id: clickAction
             font.pixelSize: Appearance.font.pixelSize.normal
-            color: Appearance.colors.colOnPrimaryContainer
+            color: Appearance.colors.colOnLayer1
             horizontalAlignment: Text.AlignRight
             text: root.itemClickActionName
         }

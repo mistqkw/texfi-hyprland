@@ -23,8 +23,7 @@ MouseArea { // Notification group area
 
     property real dragConfirmThreshold: 70 // Drag further to discard notification
     property real dismissOvershoot: 20 // Account for gaps and bouncy animations
-    // TexFi: pixel-dissolve вместо гладкого fade, тот же принцип, что в
-    // NotificationItem.qml — 1 = карточка целая, 0 = закрыта блоками.
+    // hairline: 1 = карточка целая, 0 = закрыта; проявление — через opacity и сдвиг 8px.
     property real dissolveProgress: 0
     property var qmlParent: root?.parent?.parent // There's something between this and the parent ListView
     property var parentDragIndex: qmlParent?.dragIndex
@@ -270,12 +269,6 @@ MouseArea { // Notification group area
                 }
 
             }
-        }
-
-        PixelDissolveOverlay {
-            anchors.fill: parent
-            progress: root.dissolveProgress
-            blockColor: Appearance.colors.colLayer0
         }
     }
 }

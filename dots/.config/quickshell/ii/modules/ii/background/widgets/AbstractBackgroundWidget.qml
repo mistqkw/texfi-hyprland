@@ -32,7 +32,8 @@ AbstractWidget {
         animation: Appearance.animation.elementResize.numberAnimation.createObject(this)
     }
 
-    draggable: placementStrategy === "free"
+    // locked в конфиге виджета фиксирует положение: перетаскивать нельзя
+    draggable: placementStrategy === "free" && !(configEntry.locked ?? false)
     onReleased: {
         root.targetX = root.x;
         root.targetY = root.y;

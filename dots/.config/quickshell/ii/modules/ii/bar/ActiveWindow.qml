@@ -28,8 +28,12 @@ Item {
 
         StyledText {
             Layout.fillWidth: true
-            font.pixelSize: Appearance.font.pixelSize.smaller
-            color: Appearance.colors.colSubtext
+            // подпись-тег: моно, мелко, капсом
+            font.family: Appearance.font.family.monospace
+            font.pixelSize: 10
+            font.letterSpacing: 1.1
+            font.capitalization: Font.AllUppercase
+            color: Appearance.colors.colTextTertiary
             elide: Text.ElideRight
             text: root.focusingThisMonitor && root.activeWindow?.activated && root.biggestWindow ? 
                 root.activeWindow?.appId :

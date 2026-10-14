@@ -340,11 +340,5 @@ Item { // Notification item area
                 }
             }
         }
-
-        PixelDissolveOverlay {
-            anchors.fill: parent
-            progress: root.dissolveProgress
-            blockColor: Appearance.colors.colLayer0
-        }
     }
 }

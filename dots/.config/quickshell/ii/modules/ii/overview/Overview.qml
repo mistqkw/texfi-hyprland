@@ -14,6 +14,8 @@ import Quickshell.Hyprland
 Scope {
     id: overviewScope
     property bool dontAutoCancelSearch: false
+    property real superPressTimestamp: 0
+    property int selfInterruptGuardMs: 60
 
     PanelWindow {
         id: panelWindow
@@ -175,6 +177,7 @@ Scope {
         description: "Toggles search on release"
 
         onPressed: {
+            overviewScope.superPressTimestamp = Date.now();
             GlobalStates.superReleaseMightTrigger = true;
         }
 
@@ -191,6 +194,11 @@ Scope {
         description: "Interrupts possibility of search being toggled on release. " + "This is necessary because GlobalShortcut.onReleased in quickshell triggers whether or not you press something else while holding the key. " + "To make sure this works consistently, use binditn = MODKEYS, catchall in an automatically triggered submap that includes everything."
 
         onPressed: {
+            // Hyprland's "catchall" bind can spuriously fire for the Super key's own
+            // press/release, not just for other keys pressed while Super is held.
+            // Ignore interrupts that arrive right on top of the Super press itself.
+            if (Date.now() - overviewScope.superPressTimestamp < overviewScope.selfInterruptGuardMs)
+                return;
             GlobalStates.superReleaseMightTrigger = false;
         }
     }

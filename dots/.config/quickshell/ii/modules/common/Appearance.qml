@@ -145,8 +145,14 @@ Singleton {
         property color colLayer4Active: ColorUtils.solveOverlayColor(colLayer3Base, ColorUtils.mix(colLayer4Base, colOnLayer4, 0.80), 1 - root.contentTransparency);
         property color colOnLayer4: m3colors.m3onSurface;
         // Primary
-        property color colPrimary: m3colors.m3primary
-        property color colOnPrimary: m3colors.m3onPrimary
+        // TexFi hairline: единственный акцент #4a7dfb фиксирован и не зависит от обоев.
+        property color colPrimary: "#4a7dfb"
+        property color colOnPrimary: "#ffffff"
+        // hairline: тонкая линия вместо тени и один акцент
+        property color colHairline: "#26262c"
+        property color colTextPrimary: "#f4f4f6"
+        property color colTextSecondary: "#a3a3ad"
+        property color colTextTertiary: "#6b6b76"
         property color colPrimaryHover: ColorUtils.mix(colors.colPrimary, colLayer1Hover, 0.87)
         property color colPrimaryActive: ColorUtils.mix(colors.colPrimary, colLayer1Active, 0.7)
         property color colPrimaryContainer: m3colors.m3primaryContainer
@@ -202,16 +208,17 @@ Singleton {
     // ноль. Раньше здесь были положительные значения (8-30px), и правки по
     // одному компоненту не поспевали за тем, сколько мест на них ссылается.
     rounding: QtObject {
+        // hairline: 2–3px у мелких элементов, 10px у карточек и панелей
         property int unsharpen: 0
         property int unsharpenmore: 0
-        property int verysmall: 0
-        property int small: 0
-        property int normal: 0
-        property int large: 0
-        property int verylarge: 0
-        property int full: 0
+        property int verysmall: 2
+        property int small: 3
+        property int normal: 10
+        property int large: 10
+        property int verylarge: 10
+        property int full: 10
         property int screenRounding: 0
-        property int windowRounding: 0
+        property int windowRounding: 10
     }
 
     font: QtObject {
@@ -251,14 +258,17 @@ Singleton {
         }
     }
 
+    // hairline: при appearance.reducedMotion все анимации мгновенные
+    readonly property real motionScale: (Config.options?.appearance?.reducedMotion ?? false) ? 0 : 1
+
     animationCurves: QtObject {
         // TexFi: тот же словарь, что в AppMotion (texfi_fokus,
         // lib/core/theme/app_motion.dart) — easeOut/easeIn/easeOutBack и
         // конкретные короткие длительности, а не Material "expressive
         // spatial" с забросом на 350-650мс.
-        readonly property list<real> texfiEnter: [0, 0, 0.2, 1, 1, 1]        // Curves.easeOut
+        readonly property list<real> texfiEnter: [0.215, 0.61, 0.355, 1, 1, 1]        // easeOutCubic
         readonly property list<real> texfiExit: [0.4, 0, 1, 1, 1, 1]        // Curves.easeIn
-        readonly property list<real> texfiPop: [0.34, 1.56, 0.64, 1, 1, 1]  // Curves.easeOutBack — "просадка кнопки"
+        readonly property list<real> texfiPop: [0.215, 0.61, 0.355, 1, 1, 1]  // hairline: easeOutCubic, без перелёта
 
         // Старые имена сохранены (на них ссылаются другие файлы), но формы
         // и длительности — уже из AppMotion, а не из Material.
@@ -274,10 +284,10 @@ Singleton {
         readonly property list<real> standard: [0.2, 0, 0, 1, 1, 1]
         readonly property list<real> standardAccel: [0.3, 0, 1, 1, 1, 1]
         readonly property list<real> standardDecel: [0, 0, 0, 1, 1, 1]
-        readonly property real expressiveFastSpatialDuration: 180    // AppMotion.pop
-        readonly property real expressiveDefaultSpatialDuration: 220 // AppMotion.normal
-        readonly property real expressiveSlowSpatialDuration: 300    // AppMotion.slow
-        readonly property real expressiveEffectsDuration: 150        // AppMotion.fast
+        readonly property real expressiveFastSpatialDuration: 180 * root.motionScale    // AppMotion.pop
+        readonly property real expressiveDefaultSpatialDuration: 220 * root.motionScale // AppMotion.normal
+        readonly property real expressiveSlowSpatialDuration: 300 * root.motionScale    // AppMotion.slow
+        readonly property real expressiveEffectsDuration: 150 * root.motionScale        // AppMotion.fast
     }
 
     animation: QtObject {
@@ -310,7 +320,7 @@ Singleton {
         }
 
         property QtObject elementMoveEnter: QtObject {
-            property int duration: 220 // AppMotion.normal
+            property int duration: 220 * root.motionScale // AppMotion.normal
             property int type: Easing.BezierSpline
             property list<real> bezierCurve: animationCurves.texfiEnter
             property int velocity: 650
@@ -325,7 +335,7 @@ Singleton {
         }
 
         property QtObject elementMoveExit: QtObject {
-            property int duration: 150 // AppMotion.fast
+            property int duration: 150 * root.motionScale // AppMotion.fast
             property int type: Easing.BezierSpline
             property list<real> bezierCurve: animationCurves.texfiExit
             property int velocity: 650
@@ -358,9 +368,9 @@ Singleton {
         }
 
         property QtObject elementResize: QtObject {
-            property int duration: 300
+            property int duration: 260 * root.motionScale
             property int type: Easing.BezierSpline
-            property list<real> bezierCurve: animationCurves.emphasized
+            property list<real> bezierCurve: animationCurves.texfiEnter
             property int velocity: 650
             property Component numberAnimation: Component {
                 NumberAnimation {
@@ -373,7 +383,7 @@ Singleton {
         }
 
         property QtObject clickBounce: QtObject {
-            property int duration: 180 // AppMotion.pop — "просадка кнопки"
+            property int duration: 160 * root.motionScale // hairline: короткий отклик, без перелёта
             property int type: Easing.BezierSpline
             property list<real> bezierCurve: animationCurves.texfiPop
             property int velocity: 850
@@ -386,7 +396,7 @@ Singleton {
         }
         
         property QtObject scroll: QtObject {
-            property int duration: 200
+            property int duration: 200 * root.motionScale
             property int type: Easing.BezierSpline
             property list<real> bezierCurve: root.animationCurves.standardDecel
         }

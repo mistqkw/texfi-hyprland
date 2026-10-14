@@ -78,9 +78,6 @@ Scope { // Scope
                         implicitWidth: dockRow.implicitWidth + 5 * 2
                         height: parent.height - Appearance.sizes.elevationMargin - Appearance.sizes.hyprlandGapsOut
 
-                        StyledRectangularShadow {
-                            target: dockVisualBackground
-                        }
                         Rectangle { // The real rectangle that is visible
                             id: dockVisualBackground
                             property real margin: Appearance.sizes.elevationMargin
@@ -89,7 +86,7 @@ Scope { // Scope
                             anchors.bottomMargin: Appearance.sizes.hyprlandGapsOut
                             color: Appearance.colors.colLayer0
                             border.width: 1
-                            border.color: Appearance.colors.colLayer0Border
+                            border.color: Appearance.colors.colHairline
                             radius: Appearance.rounding.large
                         }
 
@@ -116,7 +113,7 @@ Scope { // Scope
                                         text: "keep"
                                         horizontalAlignment: Text.AlignHCenter
                                         iconSize: Appearance.font.pixelSize.larger
-                                        color: root.pinned ? Appearance.m3colors.m3onPrimary : Appearance.colors.colOnLayer0
+                                        color: root.pinned ? Appearance.colors.colPrimary : Appearance.colors.colOnLayer0
                                     }
                                 }
                             }

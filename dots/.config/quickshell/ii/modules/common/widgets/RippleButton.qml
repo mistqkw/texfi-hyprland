@@ -17,7 +17,7 @@ Button {
     property real buttonRadiusPressed: buttonRadius
     property real buttonEffectiveRadius: root.down ? root.buttonRadiusPressed : root.buttonRadius
     property int rippleDuration: 1200
-    property bool rippleEnabled: true
+    property bool rippleEnabled: false // hairline: отклик цветом/рамкой, не волной
     property var downAction // When left clicking (down)
     property var releaseAction // When left clicking (release)
     property var altAction // When right clicking
@@ -25,10 +25,21 @@ Button {
 
     property color colBackground: ColorUtils.transparentize(Appearance?.colors.colLayer1Hover, 1) || "transparent"
     property color colBackgroundHover: Appearance?.colors.colLayer1Hover ?? "#E5DFED"
-    property color colBackgroundToggled: Appearance?.colors.colPrimary ?? "#65558F"
-    property color colBackgroundToggledHover: Appearance?.colors.colPrimaryHover ?? "#77699C"
+    property color colBackgroundToggled: Appearance?.colors.colLayer2 ?? "#18181c"
+    property color colBackgroundToggledHover: Appearance?.colors.colLayer2Hover ?? "#1e1e22"
     property color colRipple: Appearance?.colors.colLayer1Active ?? "#D6CEE2"
-    property color colRippleToggled: Appearance?.colors.colPrimaryActive ?? "#D6CEE2"
+    property color colRippleToggled: Appearance?.colors.colLayer2Active ?? "#24242a"
+
+    // hairline: включённая кнопка обведена акцентом
+    Rectangle {
+        visible: root.toggled
+        anchors.fill: parent
+        z: 1
+        radius: root.buttonEffectiveRadius
+        color: "transparent"
+        border.width: 1
+        border.color: Appearance?.colors.colPrimary ?? "#4a7dfb"
+    }
 
     opacity: root.enabled ? 1 : 0.4
     property color buttonColor: ColorUtils.transparentize(root.toggled ? 

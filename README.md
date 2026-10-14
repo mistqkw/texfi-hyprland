@@ -1,6 +1,6 @@
 # TexFi Hyprland
 
-A fork of [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland) (illogical-impulse) in the TexFi pixel-art style.
+A fork of [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland) (illogical-impulse) in the TexFi «hairline» style: 1px lines, one blue accent, Unbounded + Inter, calm motion, and a power on/off animation.
 
 ![screenshot](screenshot.png)
 
@@ -16,6 +16,8 @@ script into `bash` won't work):
 ```bash
 git clone --branch texfi-skin --depth 1 https://github.com/mistqkw/texfi-hyprland.git /tmp/texfi-hyprland && bash /tmp/texfi-hyprland/install-texfi.sh
 ```
+
+What it changes: Quickshell shell (bar, overview search, settings, notifications, session menu, power on/off animation, fixed desktop clock), Hyprland animations, kitty, fuzzel, wlogout, hyprlock, GTK/Qt colours, a Dolphin «Extract here» menu (zip, rar, 7z, tar.*), fonts and a wallpaper. Keyboard layout, monitors and keybinds are left alone. The installer backs up what it replaces to `~/texfi-hypr-backup-*`.
 
 ## License
 

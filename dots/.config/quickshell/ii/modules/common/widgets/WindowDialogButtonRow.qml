@@ -9,7 +9,9 @@ RowLayout {
     id: root
     spacing: 4
 
-    // These shouldn't be needed but it would be a terrible waste of space to follow the spec
-    Layout.margins: -8
-    Layout.topMargin: 0
+    // TexFi: -8 тут компенсировал скруглённый угол диалога Material —
+    // тянул кнопки наружу, чтобы они не "утопали" из-за радиуса. Теперь
+    // Appearance.rounding.large = 0, отступ контента и так нулевой, и
+    // старая компенсация выталкивала кнопки за острый край диалога.
+    Layout.margins: 0
 }

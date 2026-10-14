@@ -4,7 +4,7 @@ import qs.modules.common.widgets
 import QtQuick
 
 /**
- * Material 3 dialog button. See https://m3.material.io/components/dialogs/overview
+ * hairline: текстовая кнопка диалога — моно 11px, верхний регистр, без пилюли.
  */
 RippleButton {
     id: root
@@ -13,7 +13,7 @@ RippleButton {
     padding: 14
     implicitHeight: 36
     implicitWidth: buttonTextWidget.implicitWidth + padding * 2
-    buttonRadius: Appearance?.rounding.full ?? 9999
+    buttonRadius: Appearance?.rounding.small ?? 3
 
     property color colEnabled: Appearance?.colors.colPrimary ?? "#65558F"
     property color colDisabled: Appearance?.m3colors.m3outline ?? "#8D8C96"
@@ -27,9 +27,11 @@ RippleButton {
         anchors.fill: parent
         anchors.leftMargin: root.padding
         anchors.rightMargin: root.padding
-        text: buttonText
+        text: buttonText.toUpperCase()
         horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: Appearance?.font.pixelSize.small ?? 12
+        font.family: Appearance.font.family.monospace
+        font.pixelSize: 11
+        font.letterSpacing: 1.2
         color: root.enabled ? root.colEnabled : root.colDisabled
 
         Behavior on color {

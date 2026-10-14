@@ -27,14 +27,13 @@ Item {
 
     ColumnLayout {
         anchors.centerIn: parent
-        spacing: 5
+        spacing: 12
 
-        MaterialShapeWrappedMaterialSymbol {
+        HairPlate {
             id: shapeWidget
             Layout.alignment: Qt.AlignHCenter
             padding: 12
             iconSize: 56
-            rotation: -30 * (1 - root.opacity)
         }
         StyledText {
             id: widgetNameText

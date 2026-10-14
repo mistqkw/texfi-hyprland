@@ -539,3 +539,33 @@ tooltip {
 .image-button.flat arrow {
   background: transparent;
 }
+
+/* --- TexFi hairline: фиксированная палитра и формы поверх сгенерированных цветов --- */
+@define-color accent_color #4a7dfb;
+@define-color accent_bg_color #4a7dfb;
+@define-color accent_fg_color #ffffff;
+@define-color window_bg_color #0a0a0c;
+@define-color window_fg_color #f4f4f6;
+@define-color view_bg_color #111114;
+@define-color view_fg_color #f4f4f6;
+@define-color headerbar_bg_color #0a0a0c;
+@define-color headerbar_backdrop_color #0a0a0c;
+@define-color headerbar_fg_color #f4f4f6;
+@define-color headerbar_border_color #26262c;
+@define-color card_bg_color #111114;
+@define-color card_fg_color #f4f4f6;
+@define-color sidebar_bg_color #0a0a0c;
+@define-color sidebar_fg_color #f4f4f6;
+@define-color popover_bg_color #18181c;
+@define-color popover_fg_color #f4f4f6;
+@define-color dialog_bg_color #111114;
+@define-color dialog_fg_color #f4f4f6;
+@define-color destructive_color #f06060;
+@define-color success_color #50c878;
+@define-color warning_color #e0a860;
+
+button, entry, spinbutton, .card, popover > contents, menu { border-radius: 3px; box-shadow: none; }
+window, dialog, popover > contents, .card { border-radius: 10px; }
+button, entry { border: 1px solid #26262c; }
+button:hover, entry:focus { border-color: #6b6b76; }
+button.suggested-action { background: #f4f4f6; color: #0a0a0c; border-color: #f4f4f6; }
