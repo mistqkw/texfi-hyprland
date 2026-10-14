@@ -101,19 +101,63 @@ Item { // Player instance
         border.width: 1
         border.color: Appearance.colors.colHairline
 
+        // появление: плавный подъём и проявление
+        opacity: 0
+        transform: Translate { id: enterShift; y: 10 }
+        Component.onCompleted: enterAnim.start()
+        ParallelAnimation {
+            id: enterAnim
+            NumberAnimation { target: background; property: "opacity"; to: 1; duration: 420 * Appearance.motionScale; easing.type: Easing.OutCubic }
+            NumberAnimation { target: enterShift; property: "y"; to: 0; duration: 420 * Appearance.motionScale; easing.type: Easing.OutCubic }
+        }
+
+        Item { // тонкая цветная подсветка от обложки, едва заметная
+            anchors.fill: parent
+            anchors.margins: 1
+            clip: true
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle { width: background.width - 2; height: background.height - 2; radius: background.radius - 1 }
+            }
+            StyledImage {
+                id: backdropArt
+                anchors.fill: parent
+                source: root.displayedArtFilePath
+                fillMode: Image.PreserveAspectCrop
+                cache: false
+                asynchronous: true
+                opacity: 0.22
+                layer.enabled: true
+                layer.effect: StyledBlurEffect { source: backdropArt }
+            }
+            Rectangle {
+                anchors.fill: parent
+                gradient: Gradient {
+                    orientation: Gradient.Horizontal
+                    GradientStop { position: 0.0; color: Appearance.colors.colLayer1Base }
+                    GradientStop { position: 1.0; color: ColorUtils.transparentize(Appearance.colors.colLayer1Base, 0.25) }
+                }
+            }
+        }
+
         RowLayout {
             anchors.fill: parent
-            anchors.margins: 14
-            spacing: 16
+            anchors.margins: 16
+            spacing: 18
 
             Rectangle { // обложка
+                id: artRect
                 Layout.fillHeight: true
                 implicitWidth: height
-                radius: Appearance.rounding.small
+                radius: Appearance.rounding.normal
                 color: Appearance.colors.colLayer2Base
                 border.width: 1
                 border.color: Appearance.colors.colHairline
                 clip: true
+                layer.enabled: true
+                layer.effect: OpacityMask {
+                    maskSource: Rectangle { width: artRect.width; height: artRect.height; radius: Appearance.rounding.normal }
+                }
 
                 StyledImage {
                     anchors.fill: parent
@@ -137,9 +181,34 @@ Item { // Player instance
                 Layout.fillHeight: true
                 spacing: 2
 
+                RowLayout { // метка состояния
+                    spacing: 6
+                    Rectangle {
+                        width: 6; height: 6; radius: 3
+                        color: root.player?.isPlaying ? Appearance.colors.colPrimary : Appearance.colors.colTextTertiary
+                        SequentialAnimation on opacity {
+                            running: root.player?.isPlaying ?? false
+                            loops: Animation.Infinite
+                            NumberAnimation { to: 0.3; duration: 900 }
+                            NumberAnimation { to: 1; duration: 900 }
+                            onRunningChanged: if (!running) parent.opacity = 1
+                        }
+                    }
+                    StyledText {
+                        font.family: Appearance.font.family.monospace
+                        font.pixelSize: 10
+                        font.letterSpacing: 1.4
+                        color: root.player?.isPlaying ? Appearance.colors.colPrimary : Appearance.colors.colTextTertiary
+                        text: root.player?.isPlaying ? "СЕЙЧАС ИГРАЕТ" : "ПАУЗА"
+                    }
+                }
                 StyledText {
                     Layout.fillWidth: true
-                    font.pixelSize: Appearance.font.pixelSize.large
+                    Layout.topMargin: 2
+                    font.family: Appearance.font.family.title
+                    font.weight: Font.DemiBold
+                    font.letterSpacing: -0.2
+                    font.pixelSize: 17
                     color: Appearance.colors.colTextPrimary
                     elide: Text.ElideRight
                     text: StringUtils.cleanMusicTitle(root.player?.trackTitle) || "Untitled"
@@ -149,7 +218,7 @@ Item { // Player instance
                 }
                 StyledText {
                     Layout.fillWidth: true
-                    font.pixelSize: Appearance.font.pixelSize.smaller
+                    font.pixelSize: Appearance.font.pixelSize.small
                     color: Appearance.colors.colTextSecondary
                     elide: Text.ElideRight
                     text: root.player?.trackArtist ?? ""
@@ -239,8 +308,8 @@ Item { // Player instance
                         anchors.right: parent.right
                         anchors.bottom: sliderRow.top
                         anchors.bottomMargin: 6
-                        implicitWidth: 40
-                        implicitHeight: 40
+                        implicitWidth: 44
+                        implicitHeight: 44
                         rippleEnabled: false
                         buttonRadius: Appearance.rounding.small
                         downAction: () => root.player.togglePlaying();
